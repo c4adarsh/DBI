@@ -34,9 +34,9 @@ public class ReadFile {
 				int i = 0;
 				for(String part : parts){
 					if(i == parts.length - 1){
-						mBuilder.append(part.trim());
+						mBuilder.append(part.trim().replaceAll("\'","").replaceAll(" ", "+"));
 					}else{
-						mBuilder.append(part.trim()).append("+");
+						mBuilder.append(part.trim().replaceAll("\'","")).append("+");
 					} 
 					i++;
 				}
