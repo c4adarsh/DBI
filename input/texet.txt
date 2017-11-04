@@ -1,4 +1,4 @@
-X-driver 4G	https://www.devicespecifications.com/en/model/ae794111
+X-driver 4G	https://www.devicespecifications.com/en/model/ae794111
 TM-4510	https://www.devicespecifications.com/en/model/f0f44110
 X-selfie	https://www.devicespecifications.com/en/model/f87c40c3
 X-omega	https://www.devicespecifications.com/en/model/99da407c
