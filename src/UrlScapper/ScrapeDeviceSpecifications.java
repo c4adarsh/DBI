@@ -29,7 +29,7 @@ public class ScrapeDeviceSpecifications {
 		File folder = new File("input/");
 		File[] listOfFiles = folder.listFiles();
 
-		for (int i = 0; i < listOfFiles.length; i++) {
+		/*for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				System.out.println(listOfFiles[i].getName());
 				file = "input/" + listOfFiles[i].getName();
@@ -38,7 +38,13 @@ public class ScrapeDeviceSpecifications {
 			} else if (listOfFiles[i].isDirectory()) {
 				//System.out.println("Directory " + listOfFiles[i].getName());
 			}
-		}
+		}*/
+		
+		
+		file = "input/texet.txt";
+		fout = new File("output/texet.txt");
+		startFetching(file, fout, bw);
+		
 
 
 	}
