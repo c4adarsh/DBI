@@ -24,6 +24,28 @@ public class ScrapeDeviceSpecifications {
 
 		BufferedWriter bw = null;
 
+		//get all the file names from a given folder
+
+		File folder = new File("input/");
+		File[] listOfFiles = folder.listFiles();
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()) {
+				System.out.println(listOfFiles[i].getName());
+				file = "input/" + listOfFiles[i].getName();
+				fout = new File("output/" + listOfFiles[i].getName());
+				startFetching(file, fout, bw);
+			} else if (listOfFiles[i].isDirectory()) {
+				//System.out.println("Directory " + listOfFiles[i].getName());
+			}
+		}
+
+
+	}
+
+	private static void startFetching(String file, File fout, BufferedWriter bw) {
+		FileOutputStream fos;
+		// create a output file writer
 		try {
 			fos = new FileOutputStream(fout);
 			bw = new BufferedWriter(new OutputStreamWriter(fos));
@@ -36,10 +58,12 @@ public class ScrapeDeviceSpecifications {
 			String line;
 
 			while ((line = br.readLine()) != null) {
+				if(line.trim().length() == 0){
+					break;
+				}
 				int a = line.indexOf("https:");
 				String query = line.substring(a);
 				String name = line.substring(0, a).trim();
-				//System.out.println(query);
 				URL url = new URL(query);
 				BufferedReader response = null;
 				HttpURLConnection conn = null;
@@ -72,7 +96,6 @@ public class ScrapeDeviceSpecifications {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private static void parseResponse(BufferedReader response, BufferedWriter bw, String name) throws IOException {
