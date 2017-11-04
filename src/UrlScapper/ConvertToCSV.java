@@ -11,73 +11,81 @@ import java.util.HashMap;
 import com.csvreader.CsvWriter;
 
 public class ConvertToCSV {
-	
+
 	static HashMap<String,Integer> mHashMap = new HashMap<>();
+	
+	static String errorFile = null;
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 
-        String outputFile = "new.csv";
-        
-        initializeMap();
+		String outputFile = "new.csv";
 
-        // before we open the file check to see if it already exists
-        boolean alreadyExists = new File(outputFile).exists();
+		initializeMap();
 
-        try {
-            // use FileWriter constructor that specifies open for appending
-            CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, true), ',');
+		// before we open the file check to see if it already exists
+		boolean alreadyExists = new File(outputFile).exists();
 
-            // if the file didn't already exist then we need to write out the header line
-            if (!alreadyExists)
-            {
-            	csvOutput.write("Brand");
-        		csvOutput.write("Weight");
-        		csvOutput.write("SoC");
-        		csvOutput.write("CPU");
-        		csvOutput.write("GPU");
-        		csvOutput.write("RAM");
-        		csvOutput.write("Storage");
-        		csvOutput.write("Memory cards");
-        		csvOutput.write("Display");
-        		csvOutput.write("Battery");
-        		csvOutput.write("OS");
-        		csvOutput.write("Camera");
-        		csvOutput.write("SIM card");
-        		csvOutput.write("Wi-Fi");
-        		csvOutput.write("USB");
-        		csvOutput.write("Bluetooth");
-        		csvOutput.write("Positioning");
-        		csvOutput.write("priceUrl");
-        		csvOutput.write("imageUrl");
-        		csvOutput.write("name");
-                csvOutput.endRecord();
-            }
-            
-            
-            File folder = new File("output/");
-    		File[] listOfFiles = folder.listFiles();
+		try {
+			// use FileWriter constructor that specifies open for appending
+			CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, true), ',');
 
-    		for (int i = 0; i < listOfFiles.length; i++) {
-    			if (listOfFiles[i].isFile()) {
-    				 writeToBuffer("output/" + listOfFiles[i].getName(), csvOutput);
-    			} else if (listOfFiles[i].isDirectory()) {
-    				//System.out.println("Directory " + listOfFiles[i].getName());
-    			}
-    		}
-           
-            csvOutput.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			// if the file didn't already exist then we need to write out the header line
+			if (!alreadyExists)
+			{
+				csvOutput.write("Brand");
+				csvOutput.write("Weight");
+				csvOutput.write("SoC");
+				csvOutput.write("CPU");
+				csvOutput.write("GPU");
+				csvOutput.write("RAM");
+				csvOutput.write("Storage");
+				csvOutput.write("Memory cards");
+				csvOutput.write("Display");
+				csvOutput.write("Battery");
+				csvOutput.write("OS");
+				csvOutput.write("Camera");
+				csvOutput.write("SIM card");
+				csvOutput.write("Wi-Fi");
+				csvOutput.write("USB");
+				csvOutput.write("Bluetooth");
+				csvOutput.write("Positioning");
+				csvOutput.write("priceUrl");
+				csvOutput.write("imageUrl");
+				csvOutput.write("name");
+				csvOutput.endRecord();
+			}
 
-    }
-    
+
+			File folder = new File("output/");
+			File[] listOfFiles = folder.listFiles();
+
+			for (int i = 0; i < listOfFiles.length; i++) {
+				if (listOfFiles[i].isFile()) {
+					writeToBuffer("output/" + listOfFiles[i].getName(), csvOutput);
+				} else if (listOfFiles[i].isDirectory()) {
+					//System.out.println("Directory " + listOfFiles[i].getName());
+				}
+			}
+
+			csvOutput.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	private static void writeToBuffer(String file, CsvWriter csvOutput) {
-		
+		errorFile = file;
 		int index = file.indexOf("/");
 		int startIndex = index + 1;
 		int endIndex = file.indexOf(".txt");
-		String brand = file.substring(startIndex, endIndex);
+		String brand = file;
+		try{
+			brand = file.substring(startIndex, endIndex);
+		}catch (StringIndexOutOfBoundsException e) {
+			brand = file.substring(startIndex);
+		}
+		
 
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			String line;
@@ -125,7 +133,13 @@ public class ConvertToCSV {
 	}
 
 	private static int appendToBuffer(int i, String string, String result, CsvWriter csvOutput) throws Exception {
-		
+
+		if(mHashMap.get(string) == null){
+			System.out.println(string);
+			i--;
+			return i;
+		}
+
 		if(mHashMap.get(string) == i){
 			if(result.length()==0){
 				csvOutput.write(" ");

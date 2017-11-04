@@ -115,6 +115,10 @@ public class CSVWriterExample {
 
 	private static int appendToBuffer(int i, String string, String result, CsvWriter csvOutput) throws Exception {
 		
+		
+		if(mHashMap.get(string) == null){
+			System.out.println(string);
+		}
 		if(mHashMap.get(string) == i){
 			if(result.length()==0){
 				csvOutput.write(" ");
